@@ -1,7 +1,8 @@
 #include "./monitor.h"
-#include <iostream>
 #include <thread>
 #include <chrono>
+#include <iostream>
+#include <algorithm>
 
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 
@@ -15,9 +16,11 @@ constexpr int ALERT_BLINKS = 6;
 bool isTemperatureOk(float temperature) {
     return temperature >= TEMPERATURE_MIN && temperature <= TEMPERATURE_MAX;
 }
+
 bool isPulseRateOk(float pulseRate) {
     return pulseRate >= PULSE_MIN && pulseRate <= PULSE_MAX;
 }
+
 bool isSpO2Ok(float spo2) {
     return spo2 >= SPO2_MIN;
 }
@@ -39,16 +42,18 @@ struct VitalCheck {
 };
 
 int vitalsOk(float temperature, float pulseRate, float spo2) {
-    VitalCheck checks[] = {
+    const VitalCheck checks[] = {
         {isTemperatureOk, temperature, "Temperature is critical!"},
         {isPulseRateOk,   pulseRate,   "Pulse Rate is out of range!"},
         {isSpO2Ok,        spo2,        "Oxygen Saturation out of range!"}
     };
-    for (const auto& vital : checks) {
-        if (!(vital.checker)(vital.value)) {
-            showCriticalAlert(vital.message);
-            return 0;
-        }
+
+    auto it = std::find_if(std::begin(checks), std::end(checks),
+        [](const VitalCheck& vital) { return !vital.checker(vital.value); });
+
+    if (it != std::end(checks)) {
+        showCriticalAlert(it->message);
+        return 0;
     }
     return 1;
 }
