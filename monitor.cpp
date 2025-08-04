@@ -1,7 +1,7 @@
 #include "./monitor.h"
-#include <iostream>
 #include <thread>
 #include <chrono>
+#include <iostream>
 
 using std::cout;
 using std::flush;
