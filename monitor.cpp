@@ -28,7 +28,7 @@ bool isSpO2Ok(float spo2) {
 
 void showCriticalAlert(const char* message) {
     cout << message << "\n";
-    for(int i = 0; i < ALERT_BLINKS; ++i) {
+    for (int i = 0; i < ALERT_BLINKS; ++i) {
         cout << "\r* " << flush;
         sleep_for(seconds(1));
         cout << "\r *" << flush;
