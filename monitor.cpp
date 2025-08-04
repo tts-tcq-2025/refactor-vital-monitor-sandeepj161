@@ -15,11 +15,9 @@ constexpr int ALERT_BLINKS = 6;
 bool isTemperatureOk(float temperature) {
     return temperature >= TEMPERATURE_MIN && temperature <= TEMPERATURE_MAX;
 }
-
 bool isPulseRateOk(float pulseRate) {
     return pulseRate >= PULSE_MIN && pulseRate <= PULSE_MAX;
 }
-
 bool isSpO2Ok(float spo2) {
     return spo2 >= SPO2_MIN;
 }
@@ -34,19 +32,23 @@ void showCriticalAlert(const char* message) {
     }
 }
 
+struct VitalCheck {
+    bool (*checker)(float);
+    float value;
+    const char* message;
+};
+
 int vitalsOk(float temperature, float pulseRate, float spo2) {
-    if (!isTemperatureOk(temperature)) {
-        showCriticalAlert("Temperature is critical!");
-        return 0;
-    }
-    if (!isPulseRateOk(pulseRate)) {
-        showCriticalAlert("Pulse Rate is out of range!");
-        return 0;
-    }
-    if (!isSpO2Ok(spo2)) {
-        showCriticalAlert("Oxygen Saturation out of range!");
-        return 0;
+    VitalCheck checks[] = {
+        {isTemperatureOk, temperature, "Temperature is critical!"},
+        {isPulseRateOk,   pulseRate,   "Pulse Rate is out of range!"},
+        {isSpO2Ok,        spo2,        "Oxygen Saturation out of range!"}
+    };
+    for (const auto& vital : checks) {
+        if (!(vital.checker)(vital.value)) {
+            showCriticalAlert(vital.message);
+            return 0;
+        }
     }
     return 1;
 }
-
