@@ -6,3 +6,5 @@ bool isTemperatureOk(float temperature);
 bool isPulseRateOk(float pulseRate);
 bool isSpO2Ok(float spo2);
 
+
+
