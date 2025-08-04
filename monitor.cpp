@@ -1,10 +1,12 @@
 #include "./monitor.h"
+#include <iostream>
 #include <thread>
 #include <chrono>
-#include <iostream>
-#include <algorithm>
 
-using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
+using std::cout;
+using std::flush;
+using std::this_thread::sleep_for;
+using std::chrono::seconds;
 
 constexpr float TEMPERATURE_MIN = 95.0f;
 constexpr float TEMPERATURE_MAX = 102.0f;
@@ -48,12 +50,11 @@ int vitalsOk(float temperature, float pulseRate, float spo2) {
         {isSpO2Ok,        spo2,        "Oxygen Saturation out of range!"}
     };
 
-    auto it = std::find_if(std::begin(checks), std::end(checks),
-        [](const VitalCheck& vital) { return !vital.checker(vital.value); });
-
-    if (it != std::end(checks)) {
-        showCriticalAlert(it->message);
-        return 0;
+    for (int i = 0; i < 3; ++i) {
+        if (!checks[i].checker(checks[i].value)) {
+            showCriticalAlert(checks[i].message);
+            return 0;
+        }
     }
     return 1;
 }
