@@ -46,3 +46,21 @@ Shorten the Semantic distance
 - Functional to express relation between input and output
 - Object oriented to encapsulate state with actions
 - Aspect oriented to capture repeating aspects
+
+# Extend with a feature
+
+Try _any one_ of these extensions on your code.
+Mention the extension(s) you select in your `README.md` file.
+
+### Extension 1: Early Warning
+
+Care-givers need _early warnings_ to take action,
+in addition to the alarm that you print after the limit is breached.
+Introduce a 'warning' level with a tolerance of 1.5% of the upper-limit.
+
+Example: If the body-temperature extremeties are 95 and 102, the warning-tolerance is `1.5% of 102` = `1.53`.
+Warnings need to be displayed in these ranges:
+- `95` to `95+1.53` Warning: Approaching hypothermia
+- `102-1.53` to `102` Warning: Approaching hyperthermia
+
+Same for pulse-rate and SPO2.
