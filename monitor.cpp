@@ -2,7 +2,6 @@
 #include <thread>
 #include <chrono>
 #include <iostream>
-#include <cmath>
 
 using std::cout;
 using std::flush;
@@ -45,7 +44,7 @@ void showCriticalAlert(const char* message) {
 
 static void checkEarlyWarning(float value, float min, float max,
                               const char* lowMsg, const char* highMsg) {
-    float tolerance = max * WARNING_TOLERANCE_PERCENT;
+    const float tolerance = max * WARNING_TOLERANCE_PERCENT;
     if (value > min && value <= (min + tolerance)) {
         showWarning(lowMsg);
     } else if (value >= (max - tolerance) && value < max) {
@@ -73,7 +72,8 @@ int vitalsOk(float temperature, float pulseRate, float spo2) {
          "Approaching bradycardia", "Approaching tachycardia"},
         {isSpO2Ok,        spo2,        "Oxygen Saturation out of range!",
          SPO2_MIN, 100.0f,
-         "Approaching hypoxemia", "Approaching upper SpO2 limit"}};
+         "Approaching hypoxemia", "Approaching upper SpO2 limit"}
+    };
 
     for (int i = 0; i < 3; ++i) {
         if (!checks[i].checker(checks[i].value)) {
