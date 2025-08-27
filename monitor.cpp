@@ -42,8 +42,6 @@ void showCriticalAlert(const char* message) {
     }
 }
 
-// Split early warning checks to keep CCN low.
-
 // Low-side warning band: (min, min + tol]
 static void checkLowSideWarning(float value, float min, float max, const char* msg) {
     const float tolerance = max * WARNING_TOLERANCE_PERCENT;
@@ -86,7 +84,7 @@ int vitalsOk(float temperature, float pulseRate, float spo2) {
          PULSE_MIN, PULSE_MAX,
          "Approaching bradycardia", "Approaching tachycardia"},
         {isSpO2Ok,        spo2,        "Oxygen Saturation out of range!",
-         SPO2_MIN, 100.0f, // max used only for tolerance band calc
+         SPO2_MIN, 100.0f,  //  max used only for tolerance band calc
          "Approaching hypoxemia", "Approaching upper SpO2 limit"}
     };
 
